@@ -12,8 +12,8 @@ tern.css("spinner", [[
     position: absolute;
     left: -3px;
     top: -3px;
-    width: 24px;
-    height: 24px;
+    right: -3px;
+    bottom: -3px;
     box-sizing: border-box;
     padding: 2px;
     border-radius: 6px;

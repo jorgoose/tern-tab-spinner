@@ -28,7 +28,7 @@ tern plugin install github.com/jorgoose/tern-tab-spinner --force
 
 ## Behavior
 
-- A working tab gets a 24 px rounded-square outline with a fading highlight that travels around its perimeter once per second.
+- A working tab gets a rounded-square outline, inset 3 px outside its icon, with a fading highlight that travels around the perimeter once per second. The outline scales with the interface font size.
 - The outline stays aligned with the icon; neither the square nor the icon rotates.
 - Clearing the working state removes the outline; the icon and tab layout stay intact.
 - The highlight uses Tern's `--accent` theme color.
@@ -80,6 +80,8 @@ Version 0.2.0 was smoke-tested in a live Tern window, not just loaded:
 3. Screenshots at animation times 0, 125, 250, 500, and 750 ms showed the highlight traveling along the fixed square's edges and rounded corners.
 4. With `tern ctl reduce-motion on`, icon crops at 0 ms and 250 ms were identical, while the stationary highlight remained visible. Reduced motion was restored afterward.
 5. The plugin loaded as `ready`, with no plugin problems or CSS parse errors.
+
+Version 0.2.1 replaces fixed outline dimensions with icon-relative edges. Its alignment was checked live with the interface font increased from 13 to 15 px.
 
 No headless test suite is bundled: the critical contract is Tern's actual native rendering. Recheck these behaviors against the target Tern build after changing selectors or CSS. Do not use `tern ctl running` or attention commands on an active user session as a substitute for real progress reporting.
 

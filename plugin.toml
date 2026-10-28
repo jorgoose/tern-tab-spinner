@@ -1,6 +1,6 @@
 schema = 1
 id = "tab-spinner"
 name = "Tab Spinner"
-version = "0.2.0"
+version = "0.2.1"
 description = "A moving highlight along native sidebar icons' rounded-square edges. No extra panes."
 window = "window.luau"
