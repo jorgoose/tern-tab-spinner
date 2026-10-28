@@ -1,0 +1,6 @@
+schema = 1
+id = "tab-spinner"
+name = "Tab Spinner"
+version = "0.1.0"
+description = "A working-state ring around native sidebar tab icons. No extra panes."
+window = "window.luau"
