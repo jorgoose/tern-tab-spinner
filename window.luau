@@ -15,17 +15,23 @@ tern.css("spinner", [[
     width: 24px;
     height: 24px;
     box-sizing: border-box;
-    border: 2px solid transparent;
-    border-top-color: var(--accent);
-    border-right-color: var(--accent);
-    border-radius: 50%;
+    padding: 2px;
+    border-radius: 6px;
+    background-image: perimeter-gradient(6px, 0, transparent 0%, transparent 55%, var(--accent) 90%, var(--accent) 100%);
+    mask-image: linear-gradient(white, white), linear-gradient(white, white);
+    mask-clip: content-box, border-box;
+    mask-composite: exclude;
     pointer-events: none;
     animation: tab-spinner-turn 1s linear infinite;
 }
 
 @keyframes tab-spinner-turn {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+        background-image: perimeter-gradient(6px, 0, transparent 0%, transparent 55%, var(--accent) 90%, var(--accent) 100%);
+    }
+    to {
+        background-image: perimeter-gradient(6px, 1, transparent 0%, transparent 55%, var(--accent) 90%, var(--accent) 100%);
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

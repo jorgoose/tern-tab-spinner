@@ -1,6 +1,6 @@
 # Tern Tab Spinner
 
-A small [Tern](https://stencil.so/tern) plugin that adds a rotating accent-colored ring around a working tab's existing icon in the **native left sidebar**. Idle tabs keep their original icon without a ring.
+A small [Tern](https://stencil.so/tern) plugin that sends an accent-colored loading highlight around the rounded-square edge of a working tab's existing icon in the **native left sidebar**. The square stays still; only the highlight travels. Idle tabs keep their original icon without an outline.
 
 ![Native sidebar tab: working above, idle below](docs/preview.png)
 
@@ -20,12 +20,19 @@ tern ctl tabs vertical
 
 The plugin does not change your tab orientation or other preferences automatically.
 
+To update an installed copy:
+
+```sh
+tern plugin install github.com/jorgoose/tern-tab-spinner --force
+```
+
 ## Behavior
 
-- A working tab gets a 24 px ring around its existing icon, rotating once per second.
-- Clearing the working state removes the ring; the icon and tab layout stay intact.
-- The ring uses Tern's `--accent` theme color.
-- With system reduced motion enabled, the working ring stays visible but does not rotate.
+- A working tab gets a 24 px rounded-square outline with a fading highlight that travels around its perimeter once per second.
+- The outline stays aligned with the icon; neither the square nor the icon rotates.
+- Clearing the working state removes the outline; the icon and tab layout stay intact.
+- The highlight uses Tern's `--accent` theme color.
+- With system reduced motion enabled, the highlight remains visible in a fixed position.
 - Horizontal tabs are intentionally unchanged.
 
 This is an activity indicator, not a percentage or a separate agent-state detector. It follows Tern's `.working` class, including the native progress signals used by agents. A process merely being alive is not enough. Missing activity reporting in a program must be fixed in that program or Tern, not inferred here.
@@ -40,7 +47,7 @@ The plugin uses the documented [`tern.css` API](https://docs.stencil.so/tern/pri
 #sidebar .tn-vt .nav-row.working > .tn-dk::after
 ```
 
-Those selectors and the icon dimensions can change in a Tern release. If the ring disappears or shifts after an update, disable the plugin and report your Tern version. There is no dependency on the Workspaces Sidebar plugin.
+Those selectors and the icon dimensions can change in a Tern release. If the outline disappears or shifts after an update, disable the plugin and report your Tern version. There is no dependency on the Workspaces Sidebar plugin.
 
 ## Disable or uninstall
 
@@ -62,16 +69,16 @@ tern plugin link .
 tern plugin reload
 ```
 
-`plugin.toml` is the manifest. `window.luau` installs one CSS sheet at load time. It uses a generated pseudo-element, so it adds no layout width and does not intercept clicks. There are no Lua timers or per-frame Lua callbacks.
+`plugin.toml` is the manifest. `window.luau` installs one CSS sheet at load time. A native `perimeter-gradient` animates its phase from 0 to 1 around a fixed rounded rectangle. Two masks exclude the center so the highlight never covers the icon. The generated pseudo-element adds no layout width and does not intercept clicks. There are no Lua timers or per-frame Lua callbacks.
 
 ### Verification
 
-The initial release was smoke-tested in a live Tern window, not just loaded:
+Version 0.2.0 was smoke-tested in a live Tern window, not just loaded:
 
-1. The active omp tab displayed a ring; a neighboring idle tab did not.
-2. A disposable terminal program emitted native OSC `9;4;3` (indeterminate progress), then `9;4;0` (clear progress). Tern changed the tab from busy to idle and the ring disappeared.
-3. Screenshots at animation times 0 ms and 250 ms showed different ring orientations.
-4. With `tern ctl reduce-motion on`, the same icon crops at 0 ms and 250 ms were identical, while the working ring remained visible. Reduced motion was restored afterward.
+1. The working tab displayed a square-edge highlight.
+2. A disposable terminal program emitted native OSC `9;4;3` (indeterminate progress), then `9;4;0` (clear progress). Tern changed the tab from busy to idle and the outline disappeared.
+3. Screenshots at animation times 0, 125, 250, 500, and 750 ms showed the highlight traveling along the fixed square's edges and rounded corners.
+4. With `tern ctl reduce-motion on`, icon crops at 0 ms and 250 ms were identical, while the stationary highlight remained visible. Reduced motion was restored afterward.
 5. The plugin loaded as `ready`, with no plugin problems or CSS parse errors.
 
 No headless test suite is bundled: the critical contract is Tern's actual native rendering. Recheck these behaviors against the target Tern build after changing selectors or CSS. Do not use `tern ctl running` or attention commands on an active user session as a substitute for real progress reporting.
